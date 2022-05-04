@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './style.css';
 
 function Square(props) {
     return (
@@ -42,7 +42,7 @@ class Board extends React.Component {
         );
     }
 }
-  
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -54,14 +54,18 @@ class Game extends React.Component {
             stepNumber: 0,
         };
     }
+    
     handleClick(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
+
         if (calculateWinner(squares) || squares[i]) {
             return;
         }
+
         squares[i] = this.state.xIsNext ? 'X' : 'O';
+
         this.setState({
             history: history.concat([{
                 squares: squares,
@@ -70,12 +74,15 @@ class Game extends React.Component {
             stepNumber: history.length,
         });
     }
+
+    // Переход к определенному ходу
     jumpTo(step) {
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0,
         });
     }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -93,8 +100,11 @@ class Game extends React.Component {
 
         let status;
         if (winner) {
-            status = 'Выиграл ' + winner;
-        } 
+            if (winner === 'draw') status = 'Ничья';
+            else {
+                status = 'Выиграл ' + winner;
+            }
+        }
         else {
             status = 'Следующий ход: ' + (this.state.xIsNext ? 'X' : 'O');
         }
@@ -108,8 +118,8 @@ class Game extends React.Component {
                     />
                 </div>
                 <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <div className="status">{status}</div>
+                    <ul>{moves}</ul>
                 </div>
             </div>
         );
@@ -127,13 +137,19 @@ function calculateWinner(squares) {
         [0, 4, 8],
         [2, 4, 6],
     ];
+
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
             return squares[a];
         }
     }
-    return null;
+
+    for (let i = 0; i < squares.length; i++) {
+        if (squares[i] == null) return null;
+    }
+
+    return 'draw';
 }
 
 // ========================================
