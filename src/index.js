@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './style.css';
 
+// Клетка
 function Square(props) {
     return (
         <button className="square" onClick={props.onClick}>
@@ -10,6 +11,7 @@ function Square(props) {
     );
 }
 
+// Игровая доска
 class Board extends React.Component {
     renderSquare(i) {
         return (
@@ -55,17 +57,19 @@ class Game extends React.Component {
         };
     }
     
+    // Обработка клика по клетке
     handleClick(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
 
-        if (calculateWinner(squares) || squares[i]) {
+        // Если игра закончена или клетка заполнена, то ничего не делаем
+        if (checkGameStatus(squares) || squares[i]) {
             return;
         }
 
         squares[i] = this.state.xIsNext ? 'X' : 'O';
-
+        
         this.setState({
             history: history.concat([{
                 squares: squares,
@@ -86,7 +90,8 @@ class Game extends React.Component {
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
-        const winner = calculateWinner(current.squares);
+        const winner = checkGameStatus(current.squares);
+
         const moves = history.map((step, move) => {
             const desc = move ?
                 'Перейти к ходу #' + move :
@@ -98,7 +103,8 @@ class Game extends React.Component {
             );
         });
 
-        let status;
+        // Логика, определяющая статус игры
+        let status; 
         if (winner) {
             if (winner === 'draw') status = 'Ничья';
             else {
@@ -126,7 +132,9 @@ class Game extends React.Component {
     }
 }
 
-function calculateWinner(squares) {
+// Вычисляет победивший символ
+function checkGameStatus(squares) {
+    // Массив со всеми вариациями победного ряда
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -138,21 +146,20 @@ function calculateWinner(squares) {
         [2, 4, 6],
     ];
 
+    // Если в ряду одинаковые знаки, возвращает победивший знак
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
             return squares[a];
         }
     }
-
+    // Если не все клетки заполнены
     for (let i = 0; i < squares.length; i++) {
         if (squares[i] == null) return null;
     }
-
+    // Если все клетки заполнены, но нет победителя, возвращает "ничью"
     return 'draw';
 }
-
-// ========================================
 
 ReactDOM.render(
     <Game />,
