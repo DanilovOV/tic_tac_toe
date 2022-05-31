@@ -115,11 +115,11 @@ h1, h2, h3, h4, h5, h6 {
           align-items: flex-start;
 }
 
-.game-board {
+.game__board {
   border: 1px solid black;
 }
 
-.board-row {
+.game__row {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
