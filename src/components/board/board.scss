@@ -1,0 +1,7 @@
+.board {
+  border: 1px solid black;
+
+  &__row {
+    display: flex;
+  }
+}

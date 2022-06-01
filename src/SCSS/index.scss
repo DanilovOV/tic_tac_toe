@@ -1,0 +1,33 @@
+@import './variables.scss';
+@import './reset.scss';
+
+.game {
+  margin-top: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  &__row {
+    display: flex;
+  }
+
+  &__info {
+    margin-left: 40px;
+
+    button {
+      width: 150px;
+      height: 20px;
+      margin: 3px 0 0;
+      background-color: #e0e0e0;
+      border: 1px solid #858585;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+  }
+
+  &__status {
+    font-size: 17px;
+    margin: 0 0 5px;
+    font-weight: bold;
+  }
+}
